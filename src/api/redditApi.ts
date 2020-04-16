@@ -1,8 +1,11 @@
-import { actions } from "../actions"
+import { Post } from "../domain/model/Post";
 
-export const fetchPosts = (subreddit: string) => dispatch => {
-  dispatch(actions.requestPosts(subreddit))
-  return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-    .then(response => response.json())
-    .then(json => dispatch(actions.receivePosts(subreddit, json)))
+export interface RedditResponse {
+  data: {
+    children: Array<{data: Post}>
+  }
 }
+
+export const postsApi = (subreddit: string): Promise<RedditResponse> =>
+  fetch(`https://www.reddit.com/r/${subreddit}.json`)
+    .then(response => response.json())

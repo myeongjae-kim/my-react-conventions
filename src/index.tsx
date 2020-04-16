@@ -2,20 +2,24 @@ import * as React from 'react'
 import { render } from 'react-dom'
 import { createStore, applyMiddleware, Middleware } from 'redux'
 import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
-import reducer from './reducers'
-import App from './containers/App'
+import App from './presentational/containers/App'
+import createSagaMiddleware from 'redux-saga';
+import { rootReducer, rootSaga } from './presentational/state-modules'
 
-const middleware: Middleware[] = [ thunk ];
+const sagaMiddleware = createSagaMiddleware();
+
+const middleware: Middleware[] = [ sagaMiddleware ];
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger())
 }
 
 const store = createStore(
-  reducer,
+  rootReducer,
   applyMiddleware(...middleware)
 )
+
+sagaMiddleware.run(rootSaga);
 
 render(
   <Provider store={store}>
