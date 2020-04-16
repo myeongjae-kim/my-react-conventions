@@ -1,16 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { Post } from '../../domain/model/Post'
 
-const Posts = ({posts}) => (
+interface Props {
+  posts: Post[]
+}
+
+const Posts: React.FC<Props> = ({posts}) => (
   <ul>
-    {posts.map((post, i) =>
-      <li key={i}>{post.title}</li>
+    {posts.map((post) =>
+      <li key={post.title}>{post.title}</li>
     )}
   </ul>
 )
-
-Posts.propTypes = {
-  posts: PropTypes.array.isRequired
-}
 
 export default Posts
