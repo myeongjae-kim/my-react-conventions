@@ -1,4 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
+import { fetchPosts } from "../api/redditApi";
 
 export const actions = {
   requestPosts: createAction('REQUEST_POSTS', (subreddit: string) => ({ payload: { subreddit } })),
@@ -17,13 +18,6 @@ export type Action = typeof actions.requestPosts
  | typeof actions.receivePosts
  | typeof actions.selectSubreddit
  | typeof actions.invalidateSubreddit
-
-const fetchPosts = (subreddit: string) => dispatch => {
-  dispatch(actions.requestPosts(subreddit))
-  return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-    .then(response => response.json())
-    .then(json => dispatch(actions.receivePosts(subreddit, json)))
-}
 
 const shouldFetchPosts = (state, subreddit: string) => {
   const posts = state.postsBySubreddit[subreddit]
